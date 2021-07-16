@@ -22,21 +22,21 @@ export class RedisCache {
 
     static async get<T>(id: any, cachePrefix?: string): Promise<T | null> {
         if (!_redisEnabled) { return null; }
-        const cache = new RedisValueHelper<T>({ client: redisClient, prefix: cachePrefix });
+        const cache = new RedisValueHelper<T>({ client: redisClient, prefix: cachePrefix, disableListeners: true });
         const cached = await cache.getCached(`${id}`);
         if (cached) { return cached; }
     }
 
     static async getMany<Y, T extends Entity<Y>>(ids: Y[], cachePrefix?: string): Promise<T[]> {
         if (!_redisEnabled) { return null; }
-        const cache = new RedisValueHelper<T>({ client: redisClient, prefix: cachePrefix });
+        const cache = new RedisValueHelper<T>({ client: redisClient, prefix: cachePrefix, disableListeners: true });
         const cacheds = await cache.getCacheds(ids.map(String));
         if (cacheds) { return cacheds; }
     }
 
     static async set<Y, T extends Entity<Y>>(id: Y, data: T, cachePrefix?: string): Promise<void> {
         if (!_redisEnabled) { return; }
-        const cache = new RedisValueHelper<T>({ client: redisClient, prefix: cachePrefix });
+        const cache = new RedisValueHelper<T>({ client: redisClient, prefix: cachePrefix, disableListeners: true });
         await cache.setCached(`${id}`, data); 
     }
 

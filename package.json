@@ -1,6 +1,6 @@
 {
   "name": "@quantos/micro-request",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Quantos http client with cache, retry and fallback mechanism",
   "author": "fabriziotognetto <info@quantos.it>",
   "main": "dist/index.js",
@@ -15,7 +15,7 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
-    "@quantos/redis-helper": "^1.0.8",
+    "@quantos/redis-helper": "^1.0.9",
     "axios": "^0.21.1"
   }
 }
