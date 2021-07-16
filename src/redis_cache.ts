@@ -4,7 +4,7 @@ import { Entity } from './interfaces/entity';
 
 /** Init a redis client */
 let redisClient: redis.RedisClient;
-let _redisEnabled: boolean = false;
+let _redisEnabled = false;
 
 if (process.env.REDIS_PORT && process.env.REDIS_HOST) {
     console.log('[@quantos/micro-request][Init redis client] Creating client on ' + process.env.REDIS_HOST + ':' + process.env.REDIS_PORT);
@@ -15,7 +15,6 @@ if (process.env.REDIS_PORT && process.env.REDIS_HOST) {
     redisClient.on('error', (error: any) => {
         console.error('[@quantos/micro-request][Init redis client] ' + error);
         _redisEnabled = false;
-        redisClient = null;
     });
 }
 
