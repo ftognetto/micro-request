@@ -4,14 +4,19 @@ import { Entity } from './interfaces/entity';
 
 /** Init a redis client */
 let redisClient: redis.RedisClient;
-if (process.env.REDIS_PORT && process.env.REDIS_HOST) {
-    console.log('[@quantos/micro-request][Init redis client] Creating client on ' + process.env.REDIS_HOST + ':' + process.env.REDIS_PORT);
-    redisClient = redis.createClient(Number.parseInt(process.env.REDIS_PORT), process.env.REDIS_HOST, {enable_offline_queue: false});
-    redisClient.on('error', (error: any) => {
-        console.error('[@quantos/micro-request][Init redis client] ' + error);
-        redisClient = null;
-    });
+
+function initRedisClient(): void {
+    if (process.env.REDIS_PORT && process.env.REDIS_HOST) {
+        console.log('[@quantos/micro-request][Init redis client] Creating client on ' + process.env.REDIS_HOST + ':' + process.env.REDIS_PORT);
+        redisClient = redis.createClient(Number.parseInt(process.env.REDIS_PORT), process.env.REDIS_HOST, {enable_offline_queue: false});
+        redisClient.on('error', (error: any) => {
+            console.error('[@quantos/micro-request][Init redis client] ' + error);
+            redisClient = null;
+            setTimeout(() => initRedisClient(), 10000);
+        });
+    }
 }
+initRedisClient();
 
 export class RedisCache {
 
