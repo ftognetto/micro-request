@@ -26,7 +26,10 @@ async function getOne<Y, T extends Entity<Y>>(options: MicroRequestGetOneOptions
 
     if (options.cache) {
         const cached = await RedisCache.get<T>(`${options.id}`, _cachePrefix);
-        if (cached) { return cached; }
+        if (cached) { 
+            console.log('[@quantos/micro-request][Cache] ' + _url + ' retrieved from cache');
+            return cached; 
+        }
     }
 
     try {
@@ -57,6 +60,7 @@ async function getMany<Y, T extends Entity<Y>>(options: MicroRequestGetManyOptio
         // prendo prima dalla cache
         const _cached = await RedisCache.getMany<Y, T>(options.ids, _cachePrefix); // cache.getCacheds(options.ids.map(String));
         if (_cached && _cached.length) { 
+            console.log('[@quantos/micro-request][Cache] ' + _url + ' retrieved ' + _cached.length + ' elements from cache');
             results.push(..._cached); 
             // rimuovo dagli id quelli cachati
             options.ids = options.ids.filter((id) => _cached.map((u) => u.id).indexOf(id) < 0);
@@ -97,7 +101,10 @@ async function get(options: MicroRequestGetOptions): Promise<any> {
 
     if (options.cache) {
         const cached = await RedisCache.get(_url, _cachePrefix);
-        if (cached) { return cached; }
+        if (cached) { 
+            console.log('[@quantos/micro-request][Cache] retrieved ' + _url);
+            return cached; 
+        }
     }
 
     try {
