@@ -22,9 +22,10 @@ async function getOne<Y, T extends Entity<Y>>(options: MicroRequestGetOneOptions
     };
 
     const _url = options.url(options.serviceUrl, options.id);
+    const _cachePrefix = options.cachePrefix || options.serviceUrl;
 
     if (options.cache) {
-        const cached = await RedisCache.get<T>(`${options.id}`, options.serviceUrl);
+        const cached = await RedisCache.get<T>(`${options.id}`, _cachePrefix);
         if (cached) { return cached; }
     }
 
@@ -33,7 +34,7 @@ async function getOne<Y, T extends Entity<Y>>(options: MicroRequestGetOneOptions
         const _req = new RequestWithRetry({ retry: options.retry, retryTimeout: options.retryTimeout });
         const _res = await _req.get(_url, options.headers);
         // salvo nella cache
-        if (options.cache) { await  RedisCache.set<Y, T>(options.id, _res.data, options.serviceUrl); }
+        if (options.cache) { await  RedisCache.set<Y, T>(options.id, _res.data, _cachePrefix); }
         // torno la risposta
         return _res.data;
     }
@@ -49,12 +50,12 @@ async function getMany<Y, T extends Entity<Y>>(options: MicroRequestGetManyOptio
         ...options
     };
     const _url = options.url(options.serviceUrl, options.ids);
-
+    const _cachePrefix = options.cachePrefix || options.serviceUrl;
     const results: T[] = [];
 
     if (options.cache) {
         // prendo prima dalla cache
-        const _cached = await RedisCache.getMany<Y, T>(options.ids, options.serviceUrl); // cache.getCacheds(options.ids.map(String));
+        const _cached = await RedisCache.getMany<Y, T>(options.ids, _cachePrefix); // cache.getCacheds(options.ids.map(String));
         if (_cached && _cached.length) { 
             results.push(..._cached); 
             // rimuovo dagli id quelli cachati
@@ -76,7 +77,7 @@ async function getMany<Y, T extends Entity<Y>>(options: MicroRequestGetManyOptio
         // aggungo alla cache quelli nuovi
         if (options.cache) {
             for (const t of fetched) {
-                await RedisCache.set<Y, T>(t.id, t, options.serviceUrl);
+                await RedisCache.set<Y, T>(t.id, t, _cachePrefix);
             }
         }
         results.push(...fetched);
@@ -92,9 +93,10 @@ async function get(options: MicroRequestGetOptions): Promise<any> {
     };
 
     const _url = options.url;
+    const _cachePrefix = options.cachePrefix;
 
     if (options.cache) {
-        const cached = await RedisCache.get(_url);
+        const cached = await RedisCache.get(_url, _cachePrefix);
         if (cached) { return cached; }
     }
 
@@ -103,7 +105,7 @@ async function get(options: MicroRequestGetOptions): Promise<any> {
         const _req = new RequestWithRetry({ retry: options.retry, retryTimeout: options.retryTimeout });
         const _res = await _req.get(_url, options.headers);
         // salvo nella cache
-        if (options.cache) { await RedisCache.set(_url, _res.data); }
+        if (options.cache) { await RedisCache.set(_url, _res.data, _cachePrefix); }
         // torno la risposta
         return _res.data;
     }
