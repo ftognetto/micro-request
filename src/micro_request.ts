@@ -60,7 +60,7 @@ async function getMany<Y, T extends Entity<Y>>(options: MicroRequestGetManyOptio
         // prendo prima dalla cache
         const _cached = await RedisCache.getMany<Y, T>(options.ids, _cachePrefix); // cache.getCacheds(options.ids.map(String));
         if (_cached && _cached.length) { 
-            console.log('[@quantos/micro-request][Cache] ' + _url + ' retrieved ' + _cached.length + ' elements from cache');
+            console.log('[@quantos/micro-request][Cache] ' + _url + ' retrieved ' + _cached.length + ' / ' + options.ids.length + ' elements from cache');
             results.push(..._cached); 
             // rimuovo dagli id quelli cachati
             options.ids = options.ids.filter((id) => _cached.map((u) => u.id).indexOf(id) < 0);

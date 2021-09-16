@@ -15,7 +15,7 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
-    "@quantos/redis-helper": "^1.0.9",
+    "@quantos/redis-helper": "^1.0.10",
     "axios": "^0.21.1"
   }
 }
