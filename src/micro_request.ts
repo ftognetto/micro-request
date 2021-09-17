@@ -89,7 +89,7 @@ async function getMany<Y, T extends Entity<Y>>(options: MicroRequestGetManyOptio
     return results;
 }
 
-async function get(options: MicroRequestGetOptions): Promise<any> {
+async function get<T>(options: MicroRequestGetOptions): Promise<T> {
 
     options = {
         ...defaultMicroRequestOptions,
@@ -100,7 +100,7 @@ async function get(options: MicroRequestGetOptions): Promise<any> {
     const _cachePrefix = options.cachePrefix;
 
     if (options.cache) {
-        const cached = await RedisCache.get(_url, _cachePrefix);
+        const cached = await RedisCache.get<T>(_url, _cachePrefix);
         if (cached) { 
             console.log('[@quantos/micro-request][Cache] retrieved ' + _url);
             return cached; 
