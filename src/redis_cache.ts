@@ -18,6 +18,12 @@ if (process.env.REDIS_URL) {
       console.error('[@quantos/micro-request][Init redis client] ' + error);
       _redisEnabled = false;
     });
+  redisClient.on('error', (error: any) => {
+    console.error('[@quantos/micro-request][Redis client] ' + error);
+  });
+  process.on('SIGTERM', () => {
+    redisClient.disconnect();
+  });
 }
 
 export class RedisCache {
