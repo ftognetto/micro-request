@@ -4,6 +4,7 @@ import { Entity } from './interfaces/entity';
 /** Init a redis client */
 let redisClient: RedisClientType;
 let _redisEnabled = false;
+let _redisTTL = process.env.REDIS_TTL ? Number.parseInt(process.env.REDIS_TTL) : 0;
 
 if (process.env.REDIS_URL) {
   console.log('[@quantos/micro-request][Init redis client] Creating client on ' + process.env.REDIS_URL);
@@ -50,7 +51,11 @@ export class RedisCache {
       return;
     }
     try {
-      await redisClient.set(`${cachePrefix}:${id}`, JSON.stringify(data), { EX: options?.ttl });
+      if (options?.ttl || _redisTTL) {
+        await redisClient.setEx(`${cachePrefix}:${id}`, options?.ttl || _redisTTL, JSON.stringify(data));
+      } else {
+        await redisClient.set(`${cachePrefix}:${id}`, JSON.stringify(data));
+      }
     } catch (e) {
       // do nothing
     }
