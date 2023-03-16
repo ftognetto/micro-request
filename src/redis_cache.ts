@@ -37,7 +37,7 @@ export class RedisCache {
     }
     const cacheds: T[] = [];
     for (const key of ids) {
-      const cached = await this.get<T>(key);
+      const cached = await this.get<T>(key, cachePrefix);
       if (cached) {
         cacheds.push(cached);
       }
