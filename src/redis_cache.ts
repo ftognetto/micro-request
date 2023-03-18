@@ -66,4 +66,11 @@ export class RedisCache {
       // do nothing
     }
   }
+
+  static async invalidate(id: any, cachePrefix?: string): Promise<void> {
+    if (!_redisEnabled) {
+      return;
+    }
+    await redisClient.del(`${cachePrefix}:${id}`);
+  }
 }

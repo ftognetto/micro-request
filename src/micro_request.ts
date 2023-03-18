@@ -120,10 +120,19 @@ async function get<T>(options: MicroRequestGetOptions): Promise<T> {
   }
 }
 
+async function invalidateOne(id: any, cachePrefix?: string): Promise<void> {
+  try {
+    await RedisCache.invalidate(id, cachePrefix);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 const MicroRequest = {
   getOne,
   getMany,
   get,
+  invalidateOne,
 };
 
 export default MicroRequest;
