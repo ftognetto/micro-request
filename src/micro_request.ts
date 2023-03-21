@@ -84,6 +84,13 @@ async function getMany<Y, T extends Entity<Y>>(options: MicroRequestGetManyOptio
       for (const t of fetched) {
         await RedisCache.set<Y, T>(t.id, t, _cachePrefix);
       }
+      if (options.cache404) {
+        for (const id of options.ids) {
+          if (fetched.map((u) => u.id).indexOf(id) < 0) {
+            await RedisCache.set<Y, T>(id, null, _cachePrefix);
+          }
+        }
+      }
     }
     results.push(...fetched);
   }
