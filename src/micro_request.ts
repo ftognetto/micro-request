@@ -51,7 +51,7 @@ async function getMany<Y, T extends Entity<Y>>(options: MicroRequestGetManyOptio
     ...defaultMicroRequestOptions,
     ...options,
   };
-  const _url = options.url(options.serviceUrl, options.ids);
+  let _url = options.url(options.serviceUrl, options.ids);
   const _cachePrefix = options.cachePrefix || options.serviceUrl;
   const results: T[] = [];
 
@@ -70,6 +70,8 @@ async function getMany<Y, T extends Entity<Y>>(options: MicroRequestGetManyOptio
   // scarico quelli non cached
   let fetched: T[] = [];
   if (options.ids.length) {
+    // rinnovo l'url, alcuni id potrebbero essere stati trovati in cache
+    _url = options.url(options.serviceUrl, options.ids);
     try {
       const _req = new RequestWithRetry({ retry: options.retry, retryTimeout: options.retryTimeout });
       const _res = await _req.get(_url, options.headers);
