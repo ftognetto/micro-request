@@ -1,6 +1,6 @@
 {
   "name": "@quantos/micro-request",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "Quantos http client with cache, retry and fallback mechanism",
   "repository": "github:quantosapplications/micro-request",
   "author": "fabriziotognetto <info@quantos.it>",
