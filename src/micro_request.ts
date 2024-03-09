@@ -14,7 +14,7 @@ const defaultMicroRequestOptions: MicroRequestOptions = {
   retryTimeout: 1000,
 };
 
-async function getOne<Y, T extends Entity<Y>>(options: MicroRequestGetOneOptions<Y, T>): Promise<T> {
+export async function getOne<Y, T extends Entity<Y>>(options: MicroRequestGetOneOptions<Y, T>): Promise<T> {
   options = {
     ...defaultMicroRequestOptions,
     ...options,
@@ -46,7 +46,7 @@ async function getOne<Y, T extends Entity<Y>>(options: MicroRequestGetOneOptions
   }
 }
 
-async function getMany<Y, T extends Entity<Y>>(options: MicroRequestGetManyOptions<Y, T>): Promise<T[]> {
+export async function getMany<Y, T extends Entity<Y>>(options: MicroRequestGetManyOptions<Y, T>): Promise<T[]> {
   options = {
     ...defaultMicroRequestOptions,
     ...options,
@@ -97,7 +97,7 @@ async function getMany<Y, T extends Entity<Y>>(options: MicroRequestGetManyOptio
   return results;
 }
 
-async function get<T>(options: MicroRequestGetOptions): Promise<T> {
+export async function get<T>(options: MicroRequestGetOptions): Promise<T> {
   options = {
     ...defaultMicroRequestOptions,
     ...options,
@@ -129,19 +129,10 @@ async function get<T>(options: MicroRequestGetOptions): Promise<T> {
   }
 }
 
-async function invalidateOne(id: any, cachePrefix?: string): Promise<void> {
+export async function invalidateOne(id: any, cachePrefix?: string): Promise<void> {
   try {
     await RedisCache.invalidate(id, cachePrefix);
   } catch (e) {
     console.error(e);
   }
 }
-
-const MicroRequest = {
-  getOne,
-  getMany,
-  get,
-  invalidateOne,
-};
-
-export default MicroRequest;

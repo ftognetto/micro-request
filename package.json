@@ -1,21 +1,21 @@
 {
   "name": "@quantos/micro-request",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "Quantos http client with cache, retry and fallback mechanism",
+  "repository": "github:quantosapplications/micro-request",
   "author": "fabriziotognetto <info@quantos.it>",
   "main": "dist/index.js",
-  "repository": "github:quantosapplications/micro-request",
   "scripts": {
     "build": "tsc"
+  },
+  "dependencies": {
+    "axios": "^1.3.4",
+    "redis": "^4.6.5"
   },
   "devDependencies": {
     "@types/redis": "^4.0.11",
     "ts-loader": "^9.4.2",
     "tslint": "^6.1.3",
     "typescript": "^4.9.5"
-  },
-  "dependencies": {
-    "redis": "^4.6.5",
-    "axios": "^1.3.4"
   }
 }

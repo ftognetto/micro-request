@@ -1,2 +1,8 @@
-import microrequest from './micro_request';
-export default microrequest;
+import { get, getMany, getOne, invalidateOne } from './micro_request';
+
+export const MicroRequest = {
+  getOne,
+  getMany,
+  get,
+  invalidateOne,
+};
